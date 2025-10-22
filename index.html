@@ -4,131 +4,150 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gensyn Quiz Challenge</title>
-
   <style>
     @keyframes flicker {
-      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-        opacity: 1;
-      }
-      20%, 24%, 55% {
-        opacity: 0.3;
-      }
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+      20%, 24%, 55% { opacity: 0.3; }
     }
-
     @keyframes glitchShift {
-      0% { transform: translate(0, 0); }
-      20% { transform: translate(-1px, 1px); }
-      40% { transform: translate(1px, -1px); }
-      60% { transform: translate(-1px, -1px); }
-      80% { transform: translate(1px, 1px); }
-      100% { transform: translate(0, 0); }
+      0% { transform: translate(0,0); }
+      20% { transform: translate(-1px,1px); }
+      40% { transform: translate(1px,-1px); }
+      60% { transform: translate(-1px,-1px); }
+      80% { transform: translate(1px,1px); }
+      100% { transform: translate(0,0); }
     }
-
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background-color: #f9f3ef;
-      color: #4d2f1a;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    /* Background gensyn pattern */
-    .background-text {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      grid-template-rows: repeat(auto-fill, 40px);
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.15;
-    }
-
-    .background-text span {
-      font-size: 10px;
-      color: #6b3e23;
-      animation: flicker 3s infinite, glitchShift 1s infinite;
-      text-transform: uppercase;
-    }
-
-    .app {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: 80px 20px;
-    }
-
-    .quiz-box {
-      background: #fffaf7;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 0 30px rgba(120, 80, 60, 0.1);
-      display: inline-block;
-    }
-
-    h1 {
-      color: #4d2f1a;
-      font-size: 1.8rem;
-      letter-spacing: 1px;
-      animation: glitchShift 1s infinite;
-    }
-
-    button {
-      background-color: #6b3e23;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 12px 28px;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-top: 15px;
-      transition: all 0.2s ease-in-out;
-    }
-
-    button:hover {
-      background-color: #85523b;
-      transform: scale(1.05);
-    }
-
-    footer {
-      text-align: center;
-      color: #6b3e23;
-      font-weight: bold;
-      margin-top: 40px;
-      letter-spacing: 1px;
-    }
+    body { margin:0; font-family:"Poppins",sans-serif; background-color:#f9f3ef; color:#4d2f1a; overflow-x:hidden; position:relative;}
+    .background-text { position:fixed; top:0; left:0; width:100%; height:100%; display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); grid-template-rows:repeat(auto-fill,40px); z-index:0; pointer-events:none; opacity:0.15; }
+    .background-text span { font-size:10px; color:#6b3e23; animation:flicker 3s infinite, glitchShift 1s infinite; text-transform:uppercase; }
+    .app { position:relative; z-index:2; text-align:center; padding:80px 20px; }
+    .quiz-box { background:#fffaf7; padding:40px; border-radius:20px; box-shadow:0 0 30px rgba(120,80,60,0.1); display:inline-block; min-width:300px; }
+    h1 { color:#4d2f1a; font-size:1.8rem; letter-spacing:1px; animation:glitchShift 1s infinite; }
+    button { background-color:#6b3e23; color:white; border:none; border-radius:10px; padding:12px 28px; font-size:1rem; cursor:pointer; margin-top:15px; transition:all 0.2s ease-in-out; }
+    button:hover { background-color:#85523b; transform:scale(1.05); }
+    .option-btn { display:block; margin:10px 0; width:100%; }
+    .feedback { font-weight:bold; margin-top:15px; }
+    footer { text-align:center; color:#6b3e23; font-weight:bold; margin-top:40px; letter-spacing:1px; }
+    /* Popup */
+    .popup { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0); background:#fffaf7; padding:30px; border-radius:20px; box-shadow:0 0 30px rgba(120,80,60,0.2); z-index:5; transition:0.3s ease-in-out; max-width:400px; text-align:left; }
+    .popup.show { transform:translate(-50%,-50%) scale(1); }
+    .popup h2 { margin-top:0; animation:glitchShift 1s infinite; }
+    .popup-close { float:right; cursor:pointer; font-weight:bold; color:#6b3e23; }
   </style>
 </head>
 <body>
-  <!-- Animated background -->
   <div class="background-text">
-    <!-- Ye "gensyn" text pattern fill karega -->
     <script>
       const container = document.currentScript.parentElement;
-      for (let i = 0; i < 400; i++) {
-        const span = document.createElement('span');
-        span.textContent = 'gensyn';
-        span.style.animationDelay = `${Math.random() * 3}s`;
-        container.appendChild(span);
-      }
+      for(let i=0;i<400;i++){ const span=document.createElement('span'); span.textContent='gensyn'; span.style.animationDelay=`${Math.random()*3}s`; container.appendChild(span); }
     </script>
   </div>
 
   <div class="app">
-    <div class="quiz-box">
+    <div class="quiz-box" id="quiz-box">
       <h1>Gensyn Quiz — Start</h1>
       <p>30 quick questions about Gensyn. Test your mind and style!</p>
-      <button>Start Quiz</button><br/>
-      <button>Rules & Info</button>
+      <button id="start-btn">Start Quiz</button><br/>
+      <button id="rules-btn">Rules & Info</button>
     </div>
 
-    <footer>
-      RAWNA X GENSYN Quiz Challenge
-    </footer>
+    <footer>RAWNA X GENSYN Quiz Challenge</footer>
   </div>
+
+  <!-- Rules Popup -->
+  <div class="popup" id="rules-popup">
+    <span class="popup-close" id="close-popup">×</span>
+    <h2>Quiz Rules & Instructions</h2>
+    <ul>
+      <li>There are 20 questions in total.</li>
+      <li>Select the correct answer from 4 options.</li>
+      <li>Feedback ("Correct"/"Wrong") is shown immediately.</li>
+      <li>Click "Next" to go to the next question.</li>
+      <li>Your score will be shown at the end.</li>
+    </ul>
+  </div>
+
+  <script>
+    const quizData = [
+      {q:"What is the primary architectural foundation of the Gensyn network?", a:"A Layer 2 Polygon sidechain", b:"A custom Ethereum Rollup dedicated to machine learning", c:"A Solana-based smart contract system", d:"A standalone blockchain with proof-of-stake consensus", answer:"b"},
+      {q:"Which algorithm does Gensyn use for fully decentralized asynchronous RL post-training?", a:"SAPO", b:"Verde", c:"CheckFree", d:"NoLoCo", answer:"a"},
+      {q:"What is the maximum model size supported in the latest Gensyn Testnet update as of April 2025?", a:"32B parameters", b:"48B parameters", c:"72B parameters", d:"100B parameters", answer:"c"},
+      {q:"Which component of Gensyn ensures bitwise reproducibility across heterogeneous devices?", a:"Judge", b:"RepOps", c:"GenRL", d:"SkipPipe", answer:"b"},
+      {q:"What speedup does CheckFree provide compared to existing pipeline parallel training methods?", a:"1.2x speedup", b:"1.4x speedup", c:"1.6x speedup", d:"2.0x speedup", answer:"c"},
+      {q:"How much does SkipPipe reduce training iteration time?", a:"45%", b:"50%", c:"55%", d:"60%", answer:"c"},
+      {q:"What node failure rate can SkipPipe tolerate while maintaining fault tolerance?", a:"30%", b:"40%", c:"50%", d:"60%", answer:"c"},
+      {q:"Which library does RL Swarm now incorporate for out-of-the-box environments?", a:"OpenAI Gym", b:"Reasoning Gym", c:"ML Gym", d:"Training Gym", answer:"b"},
+      {q:"How many out-of-the-box environments does the Reasoning Gym library include?", a:">50", b:">75", c:">100", d:">150", answer:"c"},
+      {q:"What is the name of Gensyn's open-source AI assistant that learns from Minecraft gameplay?", a:"GameAssist", b:"BlockAssist", c:"MinecraftAI", d:"CraftBot", answer:"b"},
+      {q:"Which verification system is Judge built upon?", a:"Verde", b:"RepOps", c:"SAPO", d:"GenRL", answer:"a"},
+      {q:"What does NoLoCo replace in the distributed training process?", a:"The local computation step", b:"The gradient calculation step", c:"The global synchronisation step", d:"The model update step", answer:"c"},
+      {q:"What method does NoLoCo use instead of global synchronisation?", a:"Peer-to-peer messaging", b:"Gossip method", c:"Ring communication", d:"Tree reduction", answer:"b"},
+      {q:"When was the GenRL backend introduced to RL Swarm?", a:"April 30, 2025", b:"June 25, 2025", c:"August 6, 2025", d:"August 27, 2025", answer:"b"},
+      {q:"What are the four core challenges that Gensyn's protocol addresses?", a:"Execution, Verification, Communication, Coordination", b:"Training, Inference, Storage, Security", c:"Scalability, Efficiency, Privacy, Decentralization", d:"Computing, Networking, Storage, Consensus", answer:"a"},
+      {q:"Who are the founders of Gensyn?", a:"Ben Fielding and Alex Chen", b:"Harry Grieve and Ben Fielding", c:"Harry Grieve and Sarah Johnson", d:"Ben Fielding and Michael Zhang", answer:"b"},
+      {q:"Which venture capital firm led Gensyn's Series A funding round?", a:"Sequoia Capital", b:"Andreessen Horowitz (a16z)", c:"Kleiner Perkins", d:"Accel Partners", answer:"b"},
+      {q:"What is the potential compute power multiplication that Gensyn aims to achieve?", a:"5-50x", b:"10-100x", c:"20-200x", d:"50-500x", answer:"b"},
+      {q:"Which phase of the Testnet focuses on tracking participation within RL Swarm?", a:"Phase 0", b:"Phase 1", c:"Phase Alpha", d:"Phase Beta", answer:"a"},
+      {q:"What type of training does the Diverse Expert Ensembles framework focus on?", a:"Single-model training", b:"Mixture-of-experts models", c:"Transformer models only", d:"Convolutional neural networks", answer:"b"}
+    ];
+
+    let currentIndex = 0;
+    let score = 0;
+    const quizBox = document.getElementById('quiz-box');
+
+    function loadQuestion() {
+      const q = quizData[currentIndex];
+      quizBox.innerHTML = `
+        <h1>Question ${currentIndex+1}</h1>
+        <p>${q.q}</p>
+        <button class="option-btn" data-answer="a">${q.a}</button>
+        <button class="option-btn" data-answer="b">${q.b}</button>
+        <button class="option-btn" data-answer="c">${q.c}</button>
+        <button class="option-btn" data-answer="d">${q.d}</button>
+        <div class="feedback" id="feedback"></div>
+        <button id="next-btn" style="display:none;">Next</button>
+      `;
+
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const feedback = document.getElementById('feedback');
+          if(btn.dataset.answer === q.answer){
+            feedback.textContent = "✅ Correct!";
+            score++;
+          } else {
+            feedback.textContent = "❌ Wrong!";
+          }
+          document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+          document.getElementById('next-btn').style.display = 'inline-block';
+        });
+      });
+
+      document.getElementById('next-btn').addEventListener('click', () => {
+        currentIndex++;
+        if(currentIndex < quizData.length){
+          loadQuestion();
+        } else {
+          quizBox.innerHTML = `<h1>Quiz Completed!</h1>
+                               <p>You got ${score}/${quizData.length} correct!</p>
+                               <button id="restart-btn">Restart Quiz</button>`;
+          document.getElementById('restart-btn').addEventListener('click', () => location.reload());
+        }
+      });
+    }
+
+    document.getElementById('start-btn').addEventListener('click', () => {
+      currentIndex = 0;
+      score = 0;
+      loadQuestion();
+    });
+
+    const rulesPopup = document.getElementById('rules-popup');
+    document.getElementById('rules-btn').addEventListener('click', () => {
+      rulesPopup.classList.add('show');
+    });
+    document.getElementById('close-popup').addEventListener('click', () => {
+      rulesPopup.classList.remove('show');
+    });
+  </script>
 </body>
 </html>
